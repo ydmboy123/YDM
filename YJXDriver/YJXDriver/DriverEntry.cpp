@@ -22,6 +22,8 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 	pd->MajorFunction[IRP_MJ_CREATE] = YCreateRoutine;
 	YCreateDevice(pd);
 	DbgPrint("%wZ",unicode_str);
+
+	aaa
 	return status;
 
 
