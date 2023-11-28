@@ -1,0 +1,8 @@
+﻿  Building 'YJXDriver' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
+  DriverEntry.cpp
+  YJXDriver.vcxproj -> C:\code\YJXDriver\Debug\YJXDriver.sys
+  Done Adding Additional Store
+  Successfully signed: C:\code\YJXDriver\Debug\YJXDriver.sys
+  
+  Inf2Cat task was skipped as there were no inf files to process
+  
