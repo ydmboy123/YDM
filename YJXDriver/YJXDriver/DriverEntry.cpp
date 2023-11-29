@@ -18,6 +18,16 @@ void DriverUnloadFun(PDRIVER_OBJECT pd)
 	YUnloadDelete(pd);
 	return;
 }
+
+
+typedef struct _MY_FILE_INFO
+{
+	LIST_ENTRY list_entry;
+	PFILE_OBJECT file_Object;
+	UNICODE_STRING file_Name;
+	LARGE_INTEGER file_length;
+}MY_FILE_INFO,*PMY_FILE_INFO;
+
 extern "C"
 NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 {
@@ -33,8 +43,20 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 	//pd->DriverSection->Flags = pd->DriverSection->Flags | 0x20;
 	//pd->MajorFunction[IRP_MJ_CREATE] = YCreateRoutine;
 	YCreateDevice(pd);
-	UnistallAllProcessType();
-	//setMemoryProtecte();
+	//UnistallAllProcessType();
+	setMemoryProtecte();
+
+
+
+//=== LIST_ENTRY BEGIN
+
+	//LIST_ENTRY list = { 0 };
+	//InitializeListHead(&list);
+	//PMY_FILE_INFO pmFile = (PMY_FILE_INFO)ExAllocatePoolWithTag(PagedPool,sizeof(MY_FILE_INFO), 1);
+	//InsertHeadList(&list, (PLIST_ENTRY)pmFile);
+//=== LIST_ENTRY END
+	
+	
 	DbgPrint("%wZ",unicode_str);
 
 
