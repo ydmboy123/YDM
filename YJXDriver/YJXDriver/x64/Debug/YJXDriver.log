@@ -3,9 +3,9 @@
   YCreateDevice.cpp
   YUnloadDelete.cpp
   正在生成代码...
-  YJXDriver.vcxproj -> C:\code\YJXDriver\x64\Debug\YJXDriver.sys
+  YJXDriver.vcxproj -> C:\code\YDM.git\trunk\YJXDriver\x64\Debug\YJXDriver.sys
   Done Adding Additional Store
-  Successfully signed: C:\code\YJXDriver\x64\Debug\YJXDriver.sys
+  Successfully signed: C:\code\YDM.git\trunk\YJXDriver\x64\Debug\YJXDriver.sys
   
   Inf2Cat task was skipped as there were no inf files to process
   

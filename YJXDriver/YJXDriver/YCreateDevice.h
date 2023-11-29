@@ -9,7 +9,7 @@ NTSTATUS YCreateDevice(PDRIVER_OBJECT pd)
 	PDEVICE_OBJECT dObj ;
 	UNICODE_STRING unicode_str = { 0 };
 	UNICODE_STRING unicode_symbolic = { 0 };
-	RtlInitUnicodeString(&unicode_str, L"\\ydmboy");
+	RtlInitUnicodeString(&unicode_str, L"\\??\\ydmboy");
 	RtlInitUnicodeString(&unicode_symbolic, SYS_SYMlINK);
 
 	ntStatus = IoCreateDevice(pd, sizeof(pd->DriverExtension), &unicode_str, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN,FALSE,&dObj);
