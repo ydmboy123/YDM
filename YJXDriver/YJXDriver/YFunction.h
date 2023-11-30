@@ -1,5 +1,5 @@
 #pragma once
-
+#include "definition.h"
 extern "C"
 NTSTATUS YCreateRoutine(PDEVICE_OBJECT pObj, PIRP pIrp)
 {

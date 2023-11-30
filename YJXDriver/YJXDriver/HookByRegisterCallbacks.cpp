@@ -1,7 +1,5 @@
-#include <ntifs.h>
 #include "HookByRegisterCallbacks.h"
 #include "definition.h"
-
 
 extern "C"  PCHAR PsGetProcessImageFileName(IN PEPROCESS pProcess);
 
@@ -176,6 +174,10 @@ void UnistallMemoryProctect()
 	{
 		ObUnRegisterCallbacks(gs_handleCallback);
 		gs_handleCallback = NULL;
+	}
+	else
+	{
+		UNREFERENCED_PARAMETER(gs_handleCallback);
 	}
 	DbgPrint("yjx:sys Ð¶ÔØÄÚ´æ±£»¤");
 }

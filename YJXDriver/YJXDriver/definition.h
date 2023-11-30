@@ -1,8 +1,18 @@
 #pragma once
+#include <ntifs.h>
+#include <wdm.h>
+#include <windef.h>
 #define SYS_SYMlINK L"\\??\\DEVICE\\ydmboy"
 typedef struct _CALLBACK_ENTRY CALLBACK_ENTRY;
 typedef struct _CALLBACK_ENTRY_ITEM CALLBACK_ENTRY_ITEM;
 #define EX_PUSH_LOCK ULONG_PTR
+
+
+
+#define ADDRESS 0x16AC220C038
+#define PID 9972
+#define WRITE_DATA 
+#define READ_DATA
 
 typedef struct _KLDR_DATA_TABLE_ENTRY
 {

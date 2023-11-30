@@ -1,5 +1,6 @@
 #pragma once
-#include <wdm.h>
+#include "HookByRegisterCallbacks.h"
+#include "definition.h"
 
 #define PROCESS_TERMINATE (0x0001)
 #define PROCESS_CREATE_THREAD (0x0002)
