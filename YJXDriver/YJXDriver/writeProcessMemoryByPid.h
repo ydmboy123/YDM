@@ -4,7 +4,7 @@
 typedef struct
 {
 	DWORD pid;
-	DWORD64 addres;;
+	DWORD64 addres;
 	DWORD size;
 	BYTE* data;
 }writeMemoryStruct;
