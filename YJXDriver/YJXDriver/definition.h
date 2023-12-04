@@ -16,18 +16,25 @@ typedef struct _CALLBACK_ENTRY_ITEM CALLBACK_ENTRY_ITEM;
 
 typedef struct _KLDR_DATA_TABLE_ENTRY
 {
-	LIST_ENTRY listEntry;
-	ULONG unknown1;
-	ULONG unknown2;
-	ULONG unknown3;
-	ULONG unknown4;
-	ULONG unknown5;
-	ULONG unknown6;
-	ULONG unknown7;
-	UNICODE_STRING path;
-	UNICODE_STRING name;
-	ULONG Flags;
-}KLDR_DATA_TABLE_ENTRY,*PKLDR_DATA_TABLE_ENTRY;
+	LIST_ENTRY InLoadOrderLinks;
+	ULONG64 __Undefined1;
+	ULONG64 __Undefined2;
+	ULONG64 __Undefined3;
+	ULONG64 NonPagedDebugInfo;
+	ULONG64 DllBase;
+	ULONG64 EntryPoint;
+	ULONG SizeOfImage;
+	UNICODE_STRING FullDllName;
+	UNICODE_STRING BaseDllName;
+	ULONG   Flags;
+	USHORT  LoadCount;
+	USHORT  __Undefined5;
+	ULONG64 __Undefined6;
+	ULONG   CheckSum;
+	ULONG   __padding1;
+	ULONG   TimeDateStamp;
+	ULONG   __padding2;
+}KLDR_DATA_TABLE_ENTRY,LDR_DATA_TABLE_ENTRY,*PKLDR_DATA_TABLE_ENTRY;
 
 
 typedef struct _OBJECT_TYPE {

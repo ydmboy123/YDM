@@ -164,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DriverEntry.cpp" />
+    <ClCompile Include="EnumerateKernelHook.cpp" />
     <ClCompile Include="HookByRegisterCallbacks.cpp" />
     <ClCompile Include="readSysMemory.cpp" />
     <ClCompile Include="writeProcessMemoryByPid.cpp" />
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="definition.h" />
+    <ClInclude Include="EnumerateKernelHook.h" />
     <ClInclude Include="HookByRegisterCallbacks.h" />
     <ClInclude Include="readSysMemory.h" />
     <ClInclude Include="writeProcessMemoryByPid.h" />

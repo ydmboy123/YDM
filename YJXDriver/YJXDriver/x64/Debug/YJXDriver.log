@@ -1,14 +1,11 @@
 ﻿  Building 'YJXDriver' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
   DriverEntry.cpp
+  EnumerateKernelHook.cpp
   HookByRegisterCallbacks.cpp
   readSysMemory.cpp
   writeProcessMemoryByPid.cpp
   YCreateDevice.cpp
   YUnloadDelete.cpp
   正在生成代码...
-  YJXDriver.vcxproj -> C:\code\YDM.git\trunk\x64\Debug\YJXDriver.sys
-  Done Adding Additional Store
-  Successfully signed: C:\code\YDM.git\trunk\x64\Debug\YJXDriver.sys
-  
-  Inf2Cat task was skipped as there were no inf files to process
-  
+EnumerateKernelHook.obj : error LNK2019: 无法解析的外部符号 "void * __cdecl GetPsLoadedListModule(void)" (?GetPsLoadedListModule@@YAPEAXXZ)，该符号在函数 ObGetDriverNameByPoint 中被引用
+C:\code\YDM.git\trunk\x64\Debug\YJXDriver.sys : fatal error LNK1120: 1 个无法解析的外部命令

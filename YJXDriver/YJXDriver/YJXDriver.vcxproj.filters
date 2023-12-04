@@ -37,6 +37,9 @@
     <ClCompile Include="writeProcessMemoryByPid.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnumerateKernelHook.cpp">
+      <Filter>Resource Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="YFunction.h">
@@ -58,6 +61,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="writeProcessMemoryByPid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumerateKernelHook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
