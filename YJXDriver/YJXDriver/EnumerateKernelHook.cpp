@@ -78,6 +78,8 @@ PVOID GetPsLoadedListModule()
 	UCHAR shellCode[] = "\x48\x8b\x0d\x60\x60\x60\x60\x48\x85\xc9";
 	if (PsLoadedListModule)
 		return PsLoadedListModule;
+	/* 判断是否是win10以上版本*/
+		
 	if (*NtBuildNumber > 9600)
 	{
 		PsLoadedListModule = MmGetSystemRoutineAddress(&usPsLoadedModuleList);
@@ -86,7 +88,7 @@ PVOID GetPsLoadedListModule()
 	Point = GetUndocumentFunctionAddress(&usRtlPcToFileHeader,NULL,shellCode,10,0xff,0x60,0,TRUE);
 	if (Point == NULL || !MmIsAddressValid(Point))
 	{
-		return NULL
+		return NULL;
 	}
 	
 	Point = GetMovPoint(Point);
@@ -96,5 +98,63 @@ PVOID GetPsLoadedListModule()
 	}
 	PsLoadedListModule = Point;
 	return PsLoadedListModule;
+}
+
+extern "C"
+PVOID GetUndocumentFunctionAddress(IN PUNICODE_STRING pFunName,
+	IN PUCHAR pStartAddress,
+	IN UCHAR* pFeatureCode,
+	IN ULONG FeatureCodeNum,
+	ULONG SerSize,
+	UCHAR SegCode,
+	ULONG AddNum,
+	BOOLEAN ByName)
+{
+	ULONG dwIndex = 0;
+	PUCHAR pFunAddress = NULL;
+	ULONG dwCodeNum = 0;
+	if (pFeatureCode == NULL || FeatureCodeNum >=15 ||SerSize>=0x1024)
+	{
+		return NULL;
+	}
+	if (ByName)
+	{
+		if (pFunName == NULL || MmIsAddressValid(pStartAddress))
+		{
+			pFunAddress = (PUCHAR)MmGetSystemRoutineAddress(pFunName);
+			if (pFunAddress == NULL)
+			{
+				return NULL;
+			}
+		}
+		else
+		{
+			if (pStartAddress == NULL || MmIsAddressValid(pStartAddress))
+			{
+				return NULL;
+
+			}
+			pFunAddress = pStartAddress;
+		}
+	}
+	for (dwIndex = 0; dwIndex < SerSize; dwIndex++)
+	{
+		__try
+		{
+			if (pFunAddress[dwIndex] == pFeatureCode[dwCodeNum] || pFeatureCode[dwCodeNum] == SegCode)
+			{
+				dwCodeNum++;
+				if (dwCodeNum == FeatureCodeNum)
+				{
+					return pFunAddress + dwIndex - dwCodeNum + 1 + AddNum;
+				}
+			}
+
+		}
+		__except(EXCEPTION_EXECUTE_HANDLER) 
+		{
+			return 0;
+		}
+	}
 }
 
