@@ -4,6 +4,7 @@
 #include "HookByRegisterCallbacks.h"
 #include "readSysMemory.h"
 #include "writeProcessMemoryByPid.h"
+#include "EnumerateKernelHook.h"
 
 
 
@@ -45,13 +46,14 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 	//pd->DriverSection->Flags = pd->DriverSection->Flags | 0x20;
 	//pd->MajorFunction[IRP_MJ_CREATE] = YCreateRoutine;
 	YCreateDevice(pd);
-	UnistallAllProcessType();
-	WriteMemoryDbgPrint();
-	readMemoryPrint();
-
 	
 	
+	//UnistallAllProcessType();
+	//WriteMemoryDbgPrint();
+	//readMemoryPrint();
 	//setMemoryProtecte();
+
+	EnumObRegisterCallBack();
 
 
 

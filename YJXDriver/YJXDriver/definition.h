@@ -1,5 +1,6 @@
 #pragma once
 #include <ntifs.h>
+
 #include <wdm.h>
 #include <windef.h>
 #define SYS_SYMlINK L"\\??\\DEVICE\\ydmboy"
@@ -74,5 +75,28 @@ typedef struct _CALLBACK_ENTRY {
 }CALLBACK_ENTRY;
 
 
+typedef struct _CALL_BACK_INFO
+{
+	ULONG64 Unknow;
+	ULONG64 Unknow1;
+	UNICODE_STRING AltitudeString;
+	LIST_ENTRY NexEntryItemList;
+	ULONG64 Operations;
+	PVOID ObHandle;
+	PVOID ObjectType;
+	ULONG64 PreCallbackAddr;
+	ULONG64 PostCallbackAddr;
+}CALL_BACK_INFO,*PCALL_BACK_INFO;
+
+typedef struct _OB_CALLBACK
+{
+	LIST_ENTRY ListEntry;
+	ULONG64 Operations;
+	PCALL_BACK_INFO ObHandle;
+	ULONG64 ObjTypeAddr;
+	ULONG64 PreCall;
+	ULONG64 PostCall;
+
+}OB_CALLBACK,*POB_CALLBACK;
 
 
