@@ -1,5 +1,6 @@
 ﻿  Building 'YJXDriver' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
   DriverEntry.cpp
+  EnumAllDriver.cpp
   EnumerateKernelHook.cpp
   getModuleInformation.cpp
   HookByRegisterCallbacks.cpp

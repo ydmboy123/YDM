@@ -1,6 +1,7 @@
 #include "EnumerateKernelHook.h"
 #include <ntifs.h>
 #include <windef.h>
+#
 static ULONG ObjectCallbackListOffset = 0;
 //__declspec(dllimport) PSHORT NtBuildNumber;
 //extern PSHORT NtBuildNumber;
@@ -32,28 +33,37 @@ BOOLEAN ObGetDriverNameByPoint(ULONG_PTR Point, WCHAR* szDriverName)
 	PLIST_ENTRY64 Head = NULL;
 	PLIST_ENTRY64 Next = NULL;
 	pBegin = (PKLDR_DATA_TABLE_ENTRY)GetPsLoadedListModule();
+	
+	// 
+	//EnumDriverByPKLDR(pBegin);
+	//return FALSE;
+
+	
 	if (!pBegin)
 	{
 		return false;
 	}
-	Head = (PLIST_ENTRY64)&pBegin->InLoadOrderLinks.Flink;
-	Next = (PLIST_ENTRY64)&Head->Flink;
+	Head = (PLIST_ENTRY64)pBegin->InLoadOrderLinks.Flink;
+	Next = (PLIST_ENTRY64)Head->Flink;
 	do
 	{
 		PKLDR_DATA_TABLE_ENTRY Entry = CONTAINING_RECORD(Next, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
-		Next = (PLIST_ENTRY64)&Next->Flink;
+		Next = (PLIST_ENTRY64)Next->Flink;
 		if ((ULONG_PTR)Entry->DllBase <= Point && Point <= ((ULONG_PTR)Entry->DllBase + Entry->SizeOfImage))
 		{
 			if (szDriverName == NULL)
 			{
 				return FALSE;
-
 			}
 			RtlZeroMemory(szDriverName, 600);
 			RtlCopyMemory(szDriverName, Entry->BaseDllName.Buffer, Entry->BaseDllName.Length);
+			return TRUE;
 
 		}
-	}while (Next != (PLIST_ENTRY64)&Next->Flink); 
+	}while (Next != (PLIST_ENTRY64)Next->Flink); 
+
+
+
 	return FALSE;
 }
 

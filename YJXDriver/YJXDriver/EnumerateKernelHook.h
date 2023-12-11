@@ -1,5 +1,6 @@
 #pragma once
 #include "definition.h"
+#include "EnumAllDriver.h"
 extern "C"  PSHORT *NtBuildNumber;
 
 //获取文档化的函数
