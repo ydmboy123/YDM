@@ -56,9 +56,8 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 	//setMemoryProtecte();
 
 	EnumObRegisterCallBack();
-
-
-
+	//EnumObjectTypeProcessCallBack();
+	//EnumObjectTypeThreadCallBack();
 //=== LIST_ENTRY BEGIN
 
 	//LIST_ENTRY list = { 0 };

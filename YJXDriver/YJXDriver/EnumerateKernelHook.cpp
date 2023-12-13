@@ -15,9 +15,9 @@ typedef struct _LDR_DATA
 	struct _LIST_ENTRY InLoadOrderLinks;
 	struct _LIST_ENTRY InMemoryOrderLinks;
 	struct _LIST_ENTRY InInitializeationOrderLinks;
-	VOID* DllBase;
-	VOID* EntryPoint;
-	ULONG32 SizeImage;
+	VOID* DllBase;  //模块基址
+	VOID* EntryPoint; //入口点地址
+	ULONG32 SizeImage;  //模块大小
 	UINT8 _PADDING0_[0x4];
 	struct _UNICODE_STRING FullDllName;
 	struct _UNICODE_STRING BaseDllname;
@@ -257,7 +257,7 @@ BOOLEAN GetVersionAndHardCode()
 	{
 	case 7600:
 		break;
-	case 7601:
+	case 7601://虚拟机
 	{
 		ObjectCallbackListOffset = 0xC0;
 	}

@@ -29,11 +29,47 @@ VOID EnumDriverByPKLDR(PKLDR_DATA_TABLE_ENTRY entry)
 	}
 }
 
+
+// 获取的是ObjectType_Callback
 extern "C"
-VOID EnumCallBack()
+VOID EnumObjectTypeProcessCallBack()
+{
+	POB_CALLBACK pObCallback = NULL;
+	LIST_ENTRY CallbackList = ((POBJECT_TYPE)(*PsProcessType))->CallbackList;
+	pObCallback = (POB_CALLBACK)CallbackList.Flink;
+	do
+	{
+		if (FALSE == MmIsAddressValid(pObCallback))
+		{
+			break;
+		}
+		if (NULL != pObCallback->ObHandle)
+		{
+			DbgPrint("[Object_Callback] ObHandle = %p | PreCall = %p | PostCall = %p | Operation = %p\n", pObCallback->ObHandle, pObCallback->PreCall, pObCallback->PostCall,pObCallback->Operations);
+		}
+		pObCallback = (POB_CALLBACK)pObCallback->ListEntry.Flink;
+	} while (CallbackList.Flink != (PLIST_ENTRY)pObCallback);
+	return;
+}
+
+
+extern "C"
+VOID EnumObjectTypeThreadCallBack()
 {
 	POB_CALLBACK pObCallback = NULL;
 	LIST_ENTRY CallbackList = ((POBJECT_TYPE)(*PsThreadType))->CallbackList;
 	pObCallback = (POB_CALLBACK)CallbackList.Flink;
+	do
+	{
+		if (FALSE == MmIsAddressValid(pObCallback))
+		{
+			break;
+		}
+		if (NULL != pObCallback->ObHandle)
+		{
+			DbgPrint("[Object_Callback] ObHandle = %p | PreCall = %p | PostCall = %p | Operation = %p\n", pObCallback->ObHandle, pObCallback->PreCall, pObCallback->PostCall,pObCallback->Operations);
+		}
+		pObCallback = (POB_CALLBACK)pObCallback->ListEntry.Flink;
+	} while (CallbackList.Flink != (PLIST_ENTRY)pObCallback);
+	return;
 }
-
