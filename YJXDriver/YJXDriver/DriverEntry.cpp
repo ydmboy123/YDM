@@ -13,6 +13,7 @@ ULONG Flags;
 extern "C"
 void DriverUnloadFun(PDRIVER_OBJECT pd)
 {
+
 	UnistallMemoryProctect();
 	DbgPrint("DriverUnloadFun \n");
 	PKLDR_DATA_TABLE_ENTRY pLdrData = (PKLDR_DATA_TABLE_ENTRY)pd->DriverSection;
@@ -44,9 +45,20 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 	Flags = pLdrData->Flags;
 	pLdrData->Flags = pLdrData->Flags | 0x20;
 
+	DbgPrint("PDRIVER_OBJECT:%x",pd);
+
+	CONTAINING_RECORD
+
+	// Get the PsTerminateProcess
+
+
+	
+
+
+
 	//pd->DriverSection->Flags = pd->DriverSection->Flags | 0x20;
 	//pd->MajorFunction[IRP_MJ_CREATE] = YCreateRoutine;
-	YCreateDevice(pd);
+	//YCreateDevice(pd);
 	//EnumDriver(pd);
 	
 	
@@ -55,7 +67,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 	//readMemoryPrint();
 	//setMemoryProtecte();
 
-	EnumObRegisterCallBack();
+	//EnumObRegisterCallBack();
 	//EnumObjectTypeProcessCallBack();
 	//EnumObjectTypeThreadCallBack();
 //=== LIST_ENTRY BEGIN

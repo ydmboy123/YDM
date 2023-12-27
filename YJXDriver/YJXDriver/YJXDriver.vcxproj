@@ -171,6 +171,8 @@
     <ClCompile Include="readSysMemory.cpp" />
     <ClCompile Include="writeProcessMemoryByPid.cpp" />
     <ClCompile Include="YCreateDevice.cpp" />
+    <ClCompile Include="YSearchFunction.cpp" />
+    <ClCompile Include="YTerminateProcess.cpp" />
     <ClCompile Include="YUnloadDelete.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +185,8 @@
     <ClInclude Include="writeProcessMemoryByPid.h" />
     <ClInclude Include="YCreateDevice.h" />
     <ClInclude Include="YFunction.h" />
+    <ClInclude Include="YSearchFunction.h" />
+    <ClInclude Include="YTerminateProcess.h" />
     <ClInclude Include="YUnloadDelete.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
