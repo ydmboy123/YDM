@@ -2,5 +2,5 @@
 extern "C"
 PVOID searchFunction()
 {
-
+	return NULL;
 }

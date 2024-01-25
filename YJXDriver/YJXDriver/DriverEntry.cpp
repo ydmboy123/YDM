@@ -47,7 +47,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT pd, PUNICODE_STRING pUnicode)
 
 	DbgPrint("PDRIVER_OBJECT:%x",pd);
 
-	CONTAINING_RECORD
+	/*CONTAINING_RECORD*/
 
 	// Get the PsTerminateProcess
 
