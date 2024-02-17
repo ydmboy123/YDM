@@ -9,6 +9,7 @@ typedef struct _CALLBACK_ENTRY_ITEM CALLBACK_ENTRY_ITEM;
 #define EX_PUSH_LOCK ULONG_PTR
 
 
+extern "C"  PCHAR PsGetProcessImageFileName(IN PEPROCESS pProcess);
 
 #define ADDRESS  0x00007FF72375C000
 #define PID  8228
@@ -22,7 +23,7 @@ typedef struct _KLDR_DATA_TABLE_ENTRY
 	ULONG64 __Undefined2;
 	ULONG64 __Undefined3;
 	ULONG64 NonPagedDebugInfo;
-	ULONG64 DllBase;
+	ULONG64 DllBase; //.sys's dllbase
 	ULONG64 EntryPoint;
 	ULONG SizeOfImage;
 	UNICODE_STRING FullDllName;
