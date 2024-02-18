@@ -1,5 +1,36 @@
 #include "findProcess.h"
 
+
+
+
+extern "C"
+NTSTATUS EnumAllProcess()
+{
+	PEPROCESS  process = NULL;
+	NTSTATUS status = STATUS_SUCCESS;
+	for (ULONG i = 0; i<10000;i++)
+	{
+		// 获取进程名称
+		if (STATUS_SUCCESS == PsLookupProcessByProcessId((HANDLE)(ULONG_PTR)i, &process))
+		{
+			UNICODE_STRING processImageName = { 0 };
+			ANSI_STRING ascII = { 0 };
+			PCHAR pName = PsGetProcessImageFileName(process);
+			//DbgPrint("ImageName:%s", pName);
+
+			RtlInitAnsiString(&ascII,pName);
+
+			//RtlInitUnicodeString(&processImageName, &ascII);
+			RtlAnsiStringToUnicodeString(&processImageName,&ascII,TRUE);
+
+			DbgPrint("No%d:%wZ", i,processImageName);
+			ObDereferenceObject(process);
+		}
+	}
+	return status;
+}
+
+
 extern "C"
 NTSTATUS FindProcessByNameC(const WCHAR* processName, PHANDLE processHandle) {
 	PEPROCESS process;
@@ -15,10 +46,11 @@ NTSTATUS FindProcessByNameC(const WCHAR* processName, PHANDLE processHandle) {
 		// 获取进程名称
 		if (STATUS_SUCCESS == PsLookupProcessByProcessId((HANDLE)(ULONG_PTR)i, &process))
 		{
+			NTSTATUS status = STATUS_SUCCESS;
 			UNICODE_STRING processImageName = { 0 };
 			ANSI_STRING ascII = { 0 };
 			PCHAR pName = PsGetProcessImageFileName(process);
-			DbgPrint("ImageName:%s", pName);
+			//DbgPrint("ImageName:%s", pName);
 
 			RtlInitAnsiString(&ascII,pName);
 
