@@ -22,7 +22,7 @@ NTSTATUS EnumAllProcess()
 
 			//RtlInitUnicodeString(&processImageName, &ascII);
 			RtlAnsiStringToUnicodeString(&processImageName,&ascII,TRUE);
-
+		
 			DbgPrint("No%d:%wZ", i,processImageName);
 			ObDereferenceObject(process);
 		}
