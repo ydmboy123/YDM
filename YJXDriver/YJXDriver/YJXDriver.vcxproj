@@ -166,6 +166,7 @@
     <ClCompile Include="DriverEntry.cpp" />
     <ClCompile Include="EnumAllDriver.cpp" />
     <ClCompile Include="EnumerateKernelHook.cpp" />
+    <ClCompile Include="findProcess.cpp" />
     <ClCompile Include="getModuleInformation.cpp" />
     <ClCompile Include="HookByRegisterCallbacks.cpp" />
     <ClCompile Include="readSysMemory.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="definition.h" />
     <ClInclude Include="EnumAllDriver.h" />
     <ClInclude Include="EnumerateKernelHook.h" />
+    <ClInclude Include="findProcess.h" />
     <ClInclude Include="getModuleInformation.h" />
     <ClInclude Include="HookByRegisterCallbacks.h" />
     <ClInclude Include="readSysMemory.h" />

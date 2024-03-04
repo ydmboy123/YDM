@@ -1,7 +1,6 @@
 #include "HookByRegisterCallbacks.h"
 #include "definition.h"
 
-extern "C"  PCHAR PsGetProcessImageFileName(IN PEPROCESS pProcess);
 
 
 
