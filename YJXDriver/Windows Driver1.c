@@ -20,13 +20,9 @@ VOID PageProtectOn()
 	KeLowerIrql(Irql);									//减低IRQL回最初的值
 }
 
-
 ULONG_PTR GetFuncAddress(PWSTR FuncName)
 {
-	if (FuncName == NULL || FuncName[0] == L"\0" )
-	{
-		return NULL;
-	}
+
 	UNICODE_STRING uFunctionName;
 	RtlInitUnicodeString(&uFunctionName, FuncName);
 	return (ULONG_PTR)MmGetSystemRoutineAddress(&uFunctionName);
@@ -35,20 +31,7 @@ ULONG_PTR GetFuncAddress(PWSTR FuncName)
 NTSTATUS __fastcall MyPsLookupProcessByProcessId(__in HANDLE ProcessId, __deref_out PEPROCESS *Process)
 {
 	NTSTATUS RetStatus;
-	DbgPrint("ydmboy:MyPsLookupProcessByProcessId:");
-
-	PCSTR ImageFileName = PsGetProcessImageFileName(Process);
-	if (ImageFileName != NULL)
-	{
-		DbgPrint("%ws",ImageFileName);
-	}
-	else
-	{
-		DbgPrint("Not Found\n");
-	}
-
 	return STATUS_ACCESS_DENIED;
-
 	RetStatus = ((PSLOOKUPPROCESSBYPROCESSID)(OldFunc))(ProcessId, Process);
 	if (NT_SUCCESS(RetStatus) && strstr((CHAR*)PsGetProcessImageFileName(*Process), "calc"))
 	{
@@ -63,14 +46,9 @@ NTSTATUS __fastcall MyPsLookupProcessByProcessId(__in HANDLE ProcessId, __deref_
 VOID StartHook()
 {
 	ULONG_PTR PsLookupAddress;
+
 	PsLookupAddress = GetFuncAddress(L"PsLookupProcessByProcessId");
-
-	if (!PsLookupAddress)
-	{
-		return;
-	}
-//#define sfExAllocate(size) ExAllocatePoolWithTag(NonPagedPool,size,'ytz')
-
+	
 	OldFunc = (UCHAR*)sfExAllocate(sizeof(OldCode) + sizeof(JmpOld));					//先分配内存出来，如果分配失败也没必须要继续了，因为这是跳转回来的函数
 
 	if (OldFunc == NULL)
@@ -79,10 +57,11 @@ VOID StartHook()
 		return;
 	}
 
-//- PsLookupProcessByProcessId =>  前15个字节放到了oldCode 后面15个字节放到jmp 后15个字节
-	RtlCopyMemory((PVOID)OldCode, (PVOID)PsLookupAddress, sizeof(OldCode));				//拷贝原本函数最上面的15个字节保存起来
 	*(ULONG_PTR*)(JmpOld + 6) = PsLookupAddress + 15;									//跳转回原函数上15个字节处
+
 	*(ULONG_PTR*)(NewCode + 6) = (ULONG_PTR)MyPsLookupProcessByProcessId;				//跳转地址指向我们自己的函数
+
+	RtlCopyMemory((PVOID)OldCode, (PVOID)PsLookupAddress, sizeof(OldCode));				//拷贝原本函数最上面的15个字节保存起来
 
 	PageProtectOff();
 
@@ -101,51 +80,143 @@ VOID StopHook()
 
 	PsLookupAddress = GetFuncAddress(L"PsLookupProcessByProcessId");
 
-	//PageProtectOff();
+	PageProtectOff();
 
 	RtlCopyMemory((PVOID)PsLookupAddress, (PVOID)OldCode, sizeof(OldCode));				//还原函数的指令
 
-	//PageProtectOn();
+	PageProtectOn();
 
 	sfExFree(OldFunc);
 }
 
 VOID Unload(PDRIVER_OBJECT DriverObject)
 {
+	if (fCode)
+	{
+		ExFreePoolWithTag(fCode, "ydmy");
+	}
 	//StopHook();
 	KdPrint(("Unload Success!\n"));
 }
-
-void test()
+VOID HookFunc()
 {
+	DbgPrint("HookFunc\n");
+	//if (fCode)
+	//{
+	//	//__asm
+	//	//{
+	//	//	//mov eax,1
+	//	//	//mov rip,fCode
+	//	//}
+	//}
+}
 
-	ULONG_PTR PsLookupAddress;
-	PsLookupAddress = GetFuncAddress(L"PsSetCreateThreadNotifyRoutine");
-	//PsLookupAddress = GetFuncAddress(L"PsLookupProcessByProcessId");
-	if (!PsLookupAddress)
-	{
+VOID test()
+{
+	
+	ULONG_PTR PsLookupAddr = NULL;
+	PsLookupAddr = GetFuncAddress(L"PsLookupProcessByProcessId");
+	if (!PsLookupAddr || !JmpOld)
 		return;
-	}
-//PsSetCreateThreadNotifyRoutine
-	//PageProtectOff();
 
-	RtlCopyMemory((PVOID)OldCode,(PVOID) PsLookupAddress, sizeof(OldFunc));
-	//PageProtectOn();
 
-	//DbgPrint("test");
+	//PVOID YPsLookupProcessByProcess = sfExAllocate(siezeof(oldCode))
+	fCode = (char*)ExAllocatePoolWithTag(NonPagedPool, sizeof(OldCode) + sizeof(NewCode), "ydmy");
+	
+
+	RtlCopyMemory(OldCode,PsLookupAddr,sizeof(OldCode)); 
+	RtlCopyMemory(NewCode+6,&PsLookupAddr,sizeof(void*));
+	RtlCopyMemory(fCode, OldCode, sizeof(OldCode));
+	RtlCopyMemory(fCode + sizeof(OldCode), NewCode, sizeof(NewCode));
+	
+	*(ULONG_PTR*)(JmpOld + 6) = HookFunc;
+
+
+	//RtlCopyMemory((PVOID)JmpOld, (PVOID) PsLookupAddr, sizeof(JmpOld));
+	
+	
+	PageProtectOff();
+	RtlCopyMemory(PsLookupAddr, (PVOID) JmpOld, sizeof(JmpOld));
+	PageProtectOn();
+
+
+}
+VOID testA(int a, char b)// 2B
+{
+	DbgPrint("asd");
+	return NULL;
+}
+
+
+void HookFcodeTest()
+{
+	//fCode = 
+}
+
+//ULONG_PTR GetCurrentInstructionPointer();
+//VOID JmpAnyFunc(__int64 addr); 
+
+extern void JmpAnyFunc(void* addr);
+
+void JmpAddr(void* addr)
+{
+	((void(*)())addr)();
 }
 
 NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegString)
 {	
 	KdPrint(("Entry Driver!\n"));
-	test();
+	
+	ULONG_PTR* ptr = testA;
+	((void(*)())ptr)();
 
-	//PVOID pN = ExAllocatePoolWithTag(NonPagedPool, 10, "ydm");
-	//if (pN)
-	//{
-	//	ExFreePoolWithTag(pN, "ydm");
-	//}
+	fCode = sfExAllocate(0x2b);
+	RtlCopyMemory(fCode, testA, 0x2b);
+
+
+
+	//((void (*)())&fCode)();
+	//((void (*)())fCode)();
+
+
+
+	//DbgPrint("%llx",fCode);
+	//DbgPrint("%llx",&fCode);
+
+
+	//JmpAddr(fCode);
+
+	    //((void (*)())addr)();
+	//((void(*)())&fCode)();
+
+
+	//DbgPrintf("%d",sizeof(testA));
+
+	//ULONG_PTR rip = GetCurrentInstructionPointer();
+	//rip = 0;
+
+	//DbgPrint("%llx",rip);
+	// 现在rip中保存了当前指令的地址
+
+	//test();
+	//testA(1,'a');
 	//StartHook();
+	//PVOID nVOid = ExAllocatePoolWithTag(NonPagedPool, 10, "ydma");
+	//RtlCopyMemory(nVOid, L"asd", sizeof(L"asd"));
+	//if (nVOid)
+	//{
+	//	ExFreePoolWithTag(nVOid, "ydma");
+	//}
+
+// test
+	//ULONG_PTR pAddr = GetFuncAddress(L"RtlCopyMemory");
+	//ULONG_PTR pAddr = GetFuncAddress(L"PsLookupProcessByProcessId");
+	//ULONG pIntAddr = (ULONG)pAddr;
+	//int x = 15;
+	//DbgPrint("Func:%I64x\n",pIntAddr);
+	//DbgPrint("x:%I64x\n",x);
+// test
+
 	DriverObject->DriverUnload = Unload;
 	return STATUS_SUCCESS;
 }
